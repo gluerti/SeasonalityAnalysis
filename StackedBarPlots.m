@@ -3,7 +3,7 @@ close all
 
 %this code should be run in MATLAB 2019b or later
 %% Parameters defined by user
-filePath = 'G:\My Drive\GofAK_TPWS_metadataReduced\SeasonalityAnalysis\'; %specify directory to save files
+filePath = 'E:\Project Sites\GS\Seasonality\'; %specify directory to save files
 %% Find all files that fit your specifications for sites with less than a year
 files = dir([filePath,'**\*_365GroupedMean.csv']);
 n = length(files);
@@ -106,10 +106,11 @@ table_short.Juv = table_short.HoursPropJU > 0;
 table_short.Mal = table_short.HoursPropMA > 0;
 table_short.NA = table_short.HoursPropFE == 0 & table_short.HoursPropJU == 0 & table_short.HoursPropMA == 0;
 table_short.Site = string(table_short.Site);
-table_short.Males = sum(table_short.Juv > 0 & table_short.Mal > 0);
+%table_short.Males = sum(table_short.Juv > 0 & table_short.Mal > 0);
 xKOA = [sum(table_short.Juv(table_short.Site=='KOA'))  sum(table_short.Mal(table_short.Site=='KOA')) sum(table_short.Fem(table_short.Site=='KOA')) sum(table_short.NA(table_short.Site=='KOA'))];
 xKS = [sum(table_short.Juv(table_short.Site=='KS'))  sum(table_short.Mal(table_short.Site=='KS')) sum(table_short.Fem(table_short.Site=='KS')) sum(table_short.NA(table_short.Site=='KS'))];
 xAB = [sum(table_short.Juv(table_short.Site=='AB'))  sum(table_short.Mal(table_short.Site=='AB')) sum(table_short.Fem(table_short.Site=='AB')) sum(table_short.NA(table_short.Site=='AB'))];
+xGS = [sum(table_short.Juv(table_short.Site=='GS'))  sum(table_short.Mal(table_short.Site=='GS')) sum(table_short.Fem(table_short.Site=='GS')) sum(table_short.NA(table_short.Site=='GS'))];
 
 %find proportion for sites with more than a year of data
 columnIndicesToDelete = [1 3 4 5 6 7 8 9];
@@ -130,7 +131,7 @@ xQN = [sum(masterTAB.Juv(masterTAB.Site=='QN'))  sum(masterTAB.Mal(masterTAB.Sit
 xBD = [sum(masterTAB.Juv(masterTAB.Site=='BD'))  sum(masterTAB.Mal(masterTAB.Site=='BD')) sum(masterTAB.Fem(masterTAB.Site=='BD')) sum(masterTAB.NA(masterTAB.Site=='BD'))];
 xMASTER = [xCB; xBD; xQN; xPT; xKOA; xAB; xKS];
 
-b = bar(xMASTER, 'stacked','FaceColor','flat');
+b = bar(xGS, 'stacked','FaceColor','flat');
 b(1).CData = cyan;
 b(2).CData = blue;
 b(3).CData = yellow;
