@@ -92,7 +92,7 @@ saveas(gcf,[saveDir,'\',siteabrev,'DailyPresence_AllClasses_Subplots.png']);
 figure
 subplot(3,1,1)
 yyaxis left
-bar(weekPresence.tbin,weekPresence.FeHoursProp,'FaceColor','y','BarWidth',3)
+bar(weekPresence.tbin,weekPresence.FeHoursProp,'FaceColor','y','BarWidth',1)
 ylim([0 max(weekPresence.FeHoursProp)])
 yyaxis right
 plot(weekPresence.tbin, weekPresence.NormEffort_Bin*100,'.r')
@@ -100,7 +100,7 @@ ylim([-1 101])
 title(['Weekly Presence of Social Units in the ',titleNAME])
 subplot(3,1,2)
 yyaxis left
-bar(weekPresence.tbin,weekPresence.JuHoursProp,'FaceColor','b','BarWidth',3)
+bar(weekPresence.tbin,weekPresence.JuHoursProp,'FaceColor','b','BarWidth',1)
 ylim([0 max(weekPresence.JuHoursProp)])
 ylabel('Proportion of hours per week with group presence')
 yyaxis right
@@ -110,7 +110,7 @@ ylabel('Percent Effort')
 title(['Weekly Presence of Mid-Size Animals in the ',titleNAME])
 subplot(3,1,3)
 yyaxis left
-bar(weekPresence.tbin,weekPresence.MaHoursProp,'FaceColor','c','BarWidth',3)
+bar(weekPresence.tbin,weekPresence.MaHoursProp,'FaceColor','c','BarWidth',1)
 ylim([0 max(weekPresence.MaHoursProp)])
 title(['Weekly Presence of Males in the ',titleNAME])
 yyaxis right

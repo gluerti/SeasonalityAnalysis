@@ -3,7 +3,7 @@ close all
 
 %this code should be run in MATLAB 2019b or later
 %% Parameters defined by user
-filePath = 'E:\Project Sites\GS\Seasonality\'; %specify directory to save files
+filePath = ''; %specify directory to save files
 %% Find all files that fit your specifications for sites with less than a year
 files = dir([filePath,'**\*_365GroupedMean.csv']);
 n = length(files);
@@ -110,7 +110,6 @@ table_short.Site = string(table_short.Site);
 xKOA = [sum(table_short.Juv(table_short.Site=='KOA'))  sum(table_short.Mal(table_short.Site=='KOA')) sum(table_short.Fem(table_short.Site=='KOA')) sum(table_short.NA(table_short.Site=='KOA'))];
 xKS = [sum(table_short.Juv(table_short.Site=='KS'))  sum(table_short.Mal(table_short.Site=='KS')) sum(table_short.Fem(table_short.Site=='KS')) sum(table_short.NA(table_short.Site=='KS'))];
 xAB = [sum(table_short.Juv(table_short.Site=='AB'))  sum(table_short.Mal(table_short.Site=='AB')) sum(table_short.Fem(table_short.Site=='AB')) sum(table_short.NA(table_short.Site=='AB'))];
-xGS = [sum(table_short.Juv(table_short.Site=='GS'))  sum(table_short.Mal(table_short.Site=='GS')) sum(table_short.Fem(table_short.Site=='GS')) sum(table_short.NA(table_short.Site=='GS'))];
 
 %find proportion for sites with more than a year of data
 columnIndicesToDelete = [1 3 4 5 6 7 8 9];

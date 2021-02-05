@@ -49,7 +49,7 @@ hold on
 bar(binPresence.tbin,binPresence.JuvenileNormBin,'FaceColor','b','BarWidth',1)
 bar(binPresence.tbin,binPresence.FemaleNormBin,'FaceColor','y','BarWidth',1)
 legend('Males','Mid-Size','Social Units')
-saveas(gcf,[saveDir,'\',siteabrev,'DailyPresence_AllClasses130.png']);
+saveas(gcf,[saveDr,'\',siteabrev,'DailyPresence_AllClasses130.png']);
 
 %Plotting sperm whale presence with presence of each size class over it
 dayBinTAB = readtable(dayBinCSV); %read general PM table with presence information
