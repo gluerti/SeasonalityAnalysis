@@ -26,7 +26,7 @@ library(survival)
 library(gtable)
 
 #load data
-site = 'GS'
+site = 'HZ'
 filename = paste("E:/Project Sites/",site,"/Seasonality/",site,"_binPresence.csv",sep="")
 binPresence = read.csv(filename) #no effort days deleted
 head(binPresence)
@@ -143,6 +143,14 @@ if (site == 'GS'){
   GroupedDayM = binPresence;
 }
 
+if (site == 'HZ'){
+  n = 8
+  GroupedDayF = aggregate(binPresence,list(rep(1:(nrow(binPresence)%/%n+1),each=n,len=nrow(binPresence))),mean)[-1];
+  n = 5
+  GroupedDayJ = aggregate(binPresence,list(rep(1:(nrow(binPresence)%/%n+1),each=n,len=nrow(binPresence))),mean)[-1];
+  n = 6
+  GroupedDayM = aggregate(binPresence,list(rep(1:(nrow(binPresence)%/%n+1),each=n,len=nrow(binPresence))),mean)[-1];
+}
 #round day, year, month, and find season for ITS data
 if (nrow(binPresence) > nrow(GroupedDayF)){
 if (exists('GroupedDayF')){
@@ -425,13 +433,22 @@ ggsave(fig5)
 #GAM to identify seasonal pattern
 if (sum(GroupedDayF$Female > 0)){
 #females
-gamTw = gam(FeHoursProp ~ s(day, bs = 'cc', k = 47), data = GroupedDayF, family = tw, method = "REML")
+gamTw = gam(FeHoursProp ~ s(day, bs = 'cc', k = 15), data = GroupedDayF, family = tw, method = "REML")
 plot(gamTw, pages =1)
 summary(gamTw)
+
+#screenshot the output
 
 #GAM to check for significance between seasons
 gamTwS = gam(FeHoursProp ~ Season, data = GroupedDayF, family = tw, method = "REML")
 summary(gamTwS)
+
+#Kruskal-Wallis test to check for significance between seasons
+kruskal.test(FeHoursProp ~ Season, data = binPresence)
+
+pairwise.wilcox.test(binPresence$FeHoursProp, binPresence$Season)
+
+#screenshot the output
 
 #Better GAM plots
 #pattern only
@@ -470,13 +487,22 @@ ggsave(fig7)
 #GAMs with appropiate ITS binning
 
 #GAM to identify seasonal pattern
-gamTw = gam(JuHoursProp ~ s(day, bs = 'cc', k = 47), data = GroupedDayJ, family = tw, method = "REML")
+gamTw = gam(JuHoursProp ~ s(day, bs = 'cc', k = 15), data = GroupedDayJ, family = tw, method = "REML")
 plot(gamTw, pages =1)
 summary(gamTw)
+
+#screenshot the output
 
 #GAM to check for significance between seasons
 gamTwS = gam(JuHoursProp ~ Season, data = GroupedDayJ, family = tw, method = "REML")
 summary(gamTwS)
+
+#Kruskal-Wallis test to check for significance between seasons
+kruskal.test(JuHoursProp ~ Season, data = binPresence)
+
+pairwise.wilcox.test(binPresence$JuHoursProp, binPresence$Season)
+
+#screenshot the output
 
 #Better GAM plots
 #pattern only
@@ -516,13 +542,22 @@ ggsave(fig7)
 #GAMs with appropiate ITS binning
 
 #GAM to identify seasonal pattern
-gamTw = gam(MaHoursProp ~ s(day, bs = 'cc', k = 35), data = GroupedDayM, family = tw, method = "REML")
+gamTw = gam(MaHoursProp ~ s(day, bs = 'cc', k = 15), data = GroupedDayM, family = tw, method = "REML")
 plot(gamTw, pages =1)
 summary(gamTw)
+
+#at this point, write down the Pr(>|t|), p-value and the deviance explained (or screenshot the output)
 
 #GAM to check for significance between seasons
 gamTwS = gam(MaHoursProp ~ Season, data = GroupedDayM, family = tw, method = "REML")
 summary(gamTwS)
+
+#Kruskal-Wallis test to check for significance between seasons
+kruskal.test(MaHoursProp ~ Season, data = binPresence)
+
+pairwise.wilcox.test(binPresence$MaHoursProp, binPresence$Season)
+
+#screenshot the output
 
 #Better GAM plots
 #pattern only

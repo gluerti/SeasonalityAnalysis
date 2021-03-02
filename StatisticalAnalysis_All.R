@@ -95,6 +95,11 @@ if (site == 'GS'){
   GroupedDay = aggregate(dayBinTAB,list(rep(1:(nrow(dayBinTAB)%/%n+1),each=n,len=nrow(dayBinTAB))),mean)[-1];
 }
 
+if (site == 'HZ'){
+  n = 14
+  GroupedDay = aggregate(dayBinTAB,list(rep(1:(nrow(dayBinTAB)%/%n+1),each=n,len=nrow(dayBinTAB))),mean)[-1];
+}
+
 #round day, year, month, and find season for ITS data
 if (site == 'KS'){
 }else{
@@ -178,6 +183,11 @@ if (site == 'KS'){
     GroupedYear = aggregate(oneyear,list(rep(1:(nrow(oneyear)%/%n+1),each=n,len=nrow(oneyear))),mean)[-1];
   }
 
+if (site == 'HZ'){
+  n = 14
+  GroupedYear = aggregate(oneyear,list(rep(1:(nrow(oneyear)%/%n+1),each=n,len=nrow(oneyear))),mean)[-1];
+}
+
 #round day, year, month, and find season for ITS data
 if (site == 'KS'){
 }else{
@@ -233,14 +243,17 @@ if (site == 'AB'){
   plot(gamTw, pages =1)
   summary(gamTw)
 }else{
-  gamTw = gam(HoursProp ~ s(day, bs = 'cc', k = 47), data = GroupedDay, family = tw, method = "REML")
+  gamTw = gam(HoursProp ~ s(day, bs = 'cc', k = 20), data = GroupedDay, family = tw, method = "REML")
   plot(gamTw, pages =1)
   summary(gamTw)
 }
+#at this point, write down the Pr(>|t|), p-value and the deviance explained (or screenshot the output)
 
 #GAM to check for significance between seasons
 gamTwS = gam(HoursProp ~ Season, data = GroupedDay, family = tw, method = "REML")
 summary(gamTwS)
+
+#at this pint screenshot the output
 
 #Better GAM plots
 #pattern only

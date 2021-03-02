@@ -1,12 +1,12 @@
 clearvars
 close all
 %% Parameters defined by user
-filePrefix = 'WAT_HZ_04'; % File name to match. 
-siteabrev = 'HZ'; %abbreviation of site.
+filePrefix = 'WAT_GS_03'; % File name to match. 
+siteabrev = 'GS'; %abbreviation of site.
 sp = 'Pm'; % your species code
-ID_dir = 'E:\Project Sites\HZ\TPWS_125'; %where the ID files are stored
-saveDir = 'E:\Project Sites\HZ\Seasonality'; %specify directory to save files
-titleNAME = 'Western Atlantic - Heezen Canyon';
+ID_dir = 'E:\Project Sites\GS\TPWS_125'; %where the ID files are stored
+saveDir = 'E:\Project Sites\GS\Seasonality'; %specify directory to save files
+titleNAME = 'Western Atlantic - Gulf Stream';
 %% load workspace
 load([saveDir,'\',siteabrev,'_workspaceStep2.mat']);
 load([saveDir,'\',siteabrev,'_workspaceStep3.mat']);
@@ -99,15 +99,15 @@ saveas(gcf,[saveDir,'\',siteabrev,'WeeklyPresence.png']);
 %Plot proportion of hours per month with sperm whale presence
 figure
 yyaxis left
-bar(monthlyTable.tbin, monthlyTable.HoursProp)
-ylabel('Proportion of hours per month with sperm whale presence')
+bar(weekTable.tbin, weekTable.HoursProp)
+ylabel('Proportion of hours per week with sperm whale presence')
 yyaxis right
-plot(monthlyTable.tbin, monthlyTable.NormEffort_Bin*100,'.r')
+plot(weekTable.tbin, weekTable.NormEffort_Bin*100,'.r')
 ylim([-1 101])
 ylabel('Percent effort')
 legend('Sperm Whale','Effort');
-title(['Monthly Presence of Sperm whales in the ',titleNAME])
-saveas(gcf,[saveDir,'\',siteabrev,'MonthlyPresence.png']);
+title(['Weekly Presence of Sperm whales in the ',titleNAME])
+saveas(gcf,[saveDir,'\',siteabrev,'WeeklyPresence.png']);
 
 figure
 yyaxis left

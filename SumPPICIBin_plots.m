@@ -1,16 +1,16 @@
 clearvars
 close all
 %% Parameters defined by user
-filePrefix = 'WAT_GS_03'; % File name to match. 
+filePrefix = 'WAT_HZ_04'; % File name to match. 
 siteabrev = 'WAT'; %abbreviation of site.
-key = 'WAT_GS'; %after what identifying marker is the deployment number
-PlotSiteName = 'Western Atlantic - Gulf Stream';
+key = 'WAT_HZ'; %after what identifying marker is the deployment number
+PlotSiteName = 'Western Atlantic - Heezen Canyon';
 sp = 'Pm'; % your species code
 itnum = '3'; % which iteration you are looking for
 srate = 200; % sample rate
-tpwsPath = 'E:\Project Sites\GS\TPWS_125'; %directory of TPWS files
-effortXls = 'E:\Project Sites\GS\Pm_Effort_GS.xls'; % specify excel file with effort times
-saveDir = 'E:\Project Sites\GS\Plots'; %specify directory to save files
+tpwsPath = 'E:\Project Sites\HZ\TPWS_125'; %directory of TPWS files
+effortXls = 'E:\Project Sites\HZ\Pm_Effort_HZ.xls'; % specify excel file with effort times
+saveDir = 'E:\Project Sites\HZ\Plots'; %specify directory to save files
 %RC_data = 1; %If you're using RCs data, make this equal to 1, otherwise make it equal to 0.
 %% define subfolder that fit specified iteration
 if itnum > 1

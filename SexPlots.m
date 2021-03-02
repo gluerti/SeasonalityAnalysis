@@ -1,11 +1,11 @@
 clearvars
 close all
 %% Parameters defined by user
-filePrefix = 'WAT_GS_03'; % File name to match
-siteabrev = 'GS'; %abbreviation of site
+filePrefix = 'WAT_HZ_04'; % File name to match
+siteabrev = 'HZ'; %abbreviation of site
 sp = 'Pm'; % your species code
-saveDir = 'E:\Project Sites\GS\Seasonality'; %specify directory to save files
-titleNAME = 'Western Atlantic - Gulf Stream';
+saveDir = 'E:\Project Sites\HZ\Seasonality'; %specify directory to save files
+titleNAME = 'Western Atlantic - Heezen Canyon';
 %% load workspace
 load([saveDir,'\',siteabrev,'_workspaceStep2.mat']);
 load([saveDir,'\',siteabrev,'_workspaceStep3.mat']);
@@ -49,7 +49,7 @@ hold on
 bar(binPresence.tbin,binPresence.JuvenileNormBin,'FaceColor','b','BarWidth',1)
 bar(binPresence.tbin,binPresence.FemaleNormBin,'FaceColor','y','BarWidth',1)
 legend('Males','Mid-Size','Social Units')
-saveas(gcf,[saveDr,'\',siteabrev,'DailyPresence_AllClasses130.png']);
+saveas(gcf,[saveDir,'\',siteabrev,'DailyPresence_AllClasses130.png']);
 
 %Plotting sperm whale presence with presence of each size class over it
 dayBinTAB = readtable(dayBinCSV); %read general PM table with presence information
