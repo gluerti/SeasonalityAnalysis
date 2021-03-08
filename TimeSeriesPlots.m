@@ -7,6 +7,11 @@ sp = 'Pm'; % your species code
 ID_dir = 'E:\Project Sites\HZ\TPWS_125'; %where the ID files are stored
 saveDir = 'E:\Project Sites\HZ\Seasonality'; %specify directory to save files
 titleNAME = 'Western Atlantic - Heezen Canyon';
+%% load environmental
+HZ = 'HZ.xlsx';
+GS = 'GS.xlsx';
+HZ = readtable(HZ);
+GS = readtable(GS);
 %% load workspace
 load([saveDir,'\',siteabrev,'_workspaceStep2.mat']);
 load([saveDir,'\',siteabrev,'_workspaceStep3.mat']);
@@ -30,14 +35,43 @@ monthlyTable = retime(dayTable,'monthly','mean');
 monthlyTable.NormEffort_Bin = monthlyTable.Effort_Sec ./monthlyTable.MaxEffort_Sec;
 monthlyTable.NormEffort_Bin(isnan(monthlyTable.NormEffort_Bin)) = 0;
 monthlyTable.HoursProp = monthlyTable.Hours ./ (monthlyTable.Effort_Sec ./ (60*60));
+monthlyTable.Month = month(monthlyTable.tbin);
+monthlyTable.month = [];
 
-%sex table
+%merge environmental data
+if strcmp(siteabrev, 'HZ')
+    HZ(end,:) = [];
+    monthlyData = join(monthlyTable,HZ);
+else
+    GS.tbin = monthlyTable.tbin;
+    GS.Month = [];
+    monthlyData = join(timetable2table(monthlyTable),GS);
+end
+
+%sex table - weekly
 weekPresence = retime(binPresence,'weekly','sum');
 weekPresence.NormEffort_Bin = weekPresence.Effort_Sec ./weekPresence.MaxEffort_Sec;
 weekPresence.NormEffort_Bin(isnan(weekPresence.NormEffort_Bin)) = 0;
 weekPresence.FeHoursProp = weekPresence.FeHours ./(weekPresence.Effort_Sec ./ (60*60));
 weekPresence.JuHoursProp = weekPresence.JuHours ./(weekPresence.Effort_Sec ./ (60*60));
 weekPresence.MaHoursProp = weekPresence.MaHours ./(weekPresence.Effort_Sec ./ (60*60));
+
+%sex table - monthly
+monthlyPresence = retime(binPresence,'monthly','sum');
+monthlyPresence.NormEffort_Bin = monthlyPresence.Effort_Sec ./monthlyPresence.MaxEffort_Sec;
+monthlyPresence.NormEffort_Bin(isnan(monthlyPresence.NormEffort_Bin)) = 0;
+monthlyPresence.FeHoursProp = monthlyPresence.FeHours ./(monthlyPresence.Effort_Sec ./ (60*60));
+monthlyPresence.JuHoursProp = monthlyPresence.JuHours ./(monthlyPresence.Effort_Sec ./ (60*60));
+monthlyPresence.MaHoursProp = monthlyPresence.MaHours ./(monthlyPresence.Effort_Sec ./ (60*60));
+
+%merge environmental data
+if strcmp(siteabrev, 'HZ')
+    monthlyPresence.Month = month(monthlyPresence.tbin);
+    monthlyDataSexes = join(monthlyPresence,HZ);
+else
+    GS.tbin = monthlyPresence.tbin;
+    monthlyDataSexes = join(timetable2table(monthlyPresence),GS);
+end
 
 %% load ID files for GS
 if strcmp(siteabrev,'GS') % if the site name is GS
@@ -98,16 +132,19 @@ saveas(gcf,[saveDir,'\',siteabrev,'WeeklyPresence.png']);
 
 %Plot proportion of hours per month with sperm whale presence
 figure
-yyaxis left
-bar(monthlyTable.tbin, monthlyTable.HoursProp)
-ylabel('Proportion of hours per month with sperm whale presence')
-yyaxis right
-plot(monthlyTable.tbin, monthlyTable.NormEffort_Bin*100,'.r')
-ylim([-1 101])
-ylabel('Percent effort')
-legend('Sperm Whale','Effort');
+% yyaxis left
+bar(monthlyData.tbin, monthlyData.HoursProp,'k')
+addaxis(monthlyData.tbin,monthlyData.SST,'b','LineWidth',3)
+addaxis(monthlyData.tbin,monthlyData.NormEffort_Bin,'.r')
+addaxis(monthlyData.tbin,monthlyData.CHL,'g','LineWidth',3)
+addaxislabel(1,'Proportion of hours per month (PM)')
+addaxislabel(2, 'SST (C)')
+addaxislabel(3, 'Percent Effort')
+addaxislabel(4, 'Chl a (mg/m^3)')
+legend('Sperm Whale','SST','Effort','Chl a');
+xlim([min(monthlyData.tbin)-15 max(monthlyData.tbin)+15])
 title(['Monthly Presence of Sperm whales in the ',titleNAME])
-saveas(gcf,[saveDir,'\',siteabrev,'MonthlyPresence.png']);
+saveas(gcf,[saveDir,'\',siteabrev,'MonthlyPresence_withEnviro.png']);
 
 figure
 yyaxis left
@@ -184,6 +221,51 @@ yyaxis right
 plot(weekPresence.tbin, weekPresence.NormEffort_Bin*100,'.r')
 ylim([-1 101])
 saveas(gcf,[saveDir,'\',siteabrev,'WeeklyPresence_AllClasses_Subplots.png']);
+
+%Plot proportion of hours per month with male sperm whale presence
+figure
+bar(monthlyDataSexes.tbin, monthlyDataSexes.MaHoursProp,'k')
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.SST,'b','LineWidth',3)
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.NormEffort_Bin,'.r')
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.CHL,'g','LineWidth',3)
+addaxislabel(1,'Proportion of hours per month (PM)')
+addaxislabel(2, 'SST (C)')
+addaxislabel(3, 'Percent Effort')
+addaxislabel(4, 'Chl a (mg/m^3)')
+legend('Sperm Whale','SST','Effort','Chl a');
+xlim([min(monthlyData.tbin)-15 max(monthlyData.tbin)+15])
+title(['Monthly Presence of Males Sperm whales in the ',titleNAME])
+saveas(gcf,[saveDir,'\',siteabrev,'MonthlyPresence_Males_withEnviro.png']);
+
+%Plot proportion of hours per month with mid-size sperm whale presence
+figure
+bar(monthlyDataSexes.tbin, monthlyDataSexes.JuHoursProp,'k')
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.SST,'b','LineWidth',3)
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.NormEffort_Bin,'.r')
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.CHL,'g','LineWidth',3)
+addaxislabel(1,'Proportion of hours per month (PM)')
+addaxislabel(2, 'SST (C)')
+addaxislabel(3, 'Percent Effort')
+addaxislabel(4, 'Chl a (mg/m^3)')
+legend('Sperm Whale','SST','Effort','Chl a');
+xlim([min(monthlyData.tbin)-15 max(monthlyData.tbin)+15])
+title(['Monthly Presence of Mid-Size Sperm whales in the ',titleNAME])
+saveas(gcf,[saveDir,'\',siteabrev,'MonthlyPresence_MidSize_withEnviro.png']);
+
+%Plot proportion of hours per month with female sperm whale presence
+figure
+bar(monthlyDataSexes.tbin, monthlyDataSexes.FeHoursProp,'k')
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.SST,'b','LineWidth',3)
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.NormEffort_Bin,'.r')
+addaxis(monthlyDataSexes.tbin,monthlyDataSexes.CHL,'g','LineWidth',3)
+addaxislabel(1,'Proportion of hours per month (PM)')
+addaxislabel(2, 'SST (C)')
+addaxislabel(3, 'Percent Effort')
+addaxislabel(4, 'Chl a (mg/m^3)')
+legend('Sperm Whale','SST','Effort','Chl a');
+xlim([min(monthlyData.tbin)-15 max(monthlyData.tbin)+15])
+title(['Monthly Presence of Female Sperm whales in the ',titleNAME])
+saveas(gcf,[saveDir,'\',siteabrev,'MonthlyPresence_Females_withEnviro.png']);
 
 %% Average yearly plots
 %Average yearly presence of proportion of hours per DAY with sperm whale
