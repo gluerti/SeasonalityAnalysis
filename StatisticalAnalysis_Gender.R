@@ -26,7 +26,7 @@ library(survival)
 library(gtable)
 
 #load data
-site = 'GS'
+site = 'HZ'
 filename = paste("E:/Project Sites/",site,"/Seasonality/",site,"_binPresence.csv",sep="")
 binPresence = read.csv(filename) #no effort days deleted
 head(binPresence)
@@ -309,23 +309,9 @@ if (exists('oneyearF')){
   oneyear = oneyearF
 }
 
-if (site =='GS'){
-  n = 2
-  GroupedYearF = aggregate(oneyear,list(rep(1:(nrow(oneyear)%/%n+1),each=n,len=nrow(oneyear))),mean)[-1];
-  GroupedYearJ = oneyear;
-  GroupedYearM = oneyear;
-}
-
-if (site =='HZ'){
-  n = 2
-  GroupedYearF = aggregate(oneyear,list(rep(1:(nrow(oneyear)%/%n+1),each=n,len=nrow(oneyear))),mean)[-1];
-  GroupedYearJ = oneyear;
-  GroupedYearM = oneyear;
-}
-
 #round day, year, month, and find season for ITS data
-if (nrow(oneyear) == nrow(GroupedYearF)){
-  if (exists('GroupedYearF')){
+if (exists('GroupedYearF')){
+    if (nrow(oneyear) == nrow(GroupedYearF)){
     GroupedYearF$Day = floor(GroupedYearF$Day)
     GroupedYearF$Month = floor(GroupedYearF$Month)
     GroupedYearF$Season = as.integer(GroupedYearF$Season)
@@ -338,6 +324,7 @@ if (nrow(oneyear) == nrow(GroupedYearF)){
   }
 }
 
+if (exists('GroupedYearJ')){
 if (nrow(oneyear) == nrow(GroupedYearJ)){
   GroupedYearJ$Day = floor(GroupedYearJ$Day)
   GroupedYearJ$Month = floor(GroupedYearJ$Month)
@@ -349,7 +336,9 @@ if (nrow(oneyear) == nrow(GroupedYearJ)){
   GroupedYearJ$Season = as.factor(GroupedYearJ$Season) #change season from an integer to a factor
   GroupedYearJ$Season = revalue(GroupedYearJ$Season, c("1"="Winter", "2"="Spring", "3"="Summer", "4"="Fall"))
 }
+}
 
+if (exists('GroupedYearM')){
 if (nrow(oneyear) == nrow(GroupedYearM)){
   GroupedYearM$Day = floor(GroupedYearM$Day)
   GroupedYearM$Month = floor(GroupedYearM$Month)
@@ -360,6 +349,7 @@ if (nrow(oneyear) == nrow(GroupedYearM)){
   GroupedYearM$Season[GroupedYearM$Month == 10 | GroupedYearM$Month == 11 | GroupedYearM$Month == 12] = 4
   GroupedYearM$Season = as.factor(GroupedYearM$Season) #change season from an integer to a factor
   GroupedYearM$Season = revalue(GroupedYearM$Season, c("1"="Winter", "2"="Spring", "3"="Summer", "4"="Fall"))
+}
 }
 
 #plot data as time series
@@ -386,7 +376,8 @@ ggsave(fig1)
 }
 
 #plot data grouped with ITS as proportion of hours per day with clicks
-title1 = paste(site,"Yearly Average of Proportion of Hours per Day with Clicks - Time Series (ITS)")
+if (exists('GroupedYearF')){
+  title1 = paste(site,"Yearly Average of Proportion of Hours per Day with Clicks - Time Series (ITS)")
 plot1 = ggplot(GroupedYearF, aes(x=Day,y=HoursPropFE))+
   geom_bar(stat = "identity")+
   theme(axis.title.x = element_blank())+
@@ -404,6 +395,7 @@ annotate_figure(figure, top = text_grob(title1, face = "bold", size = 14), botto
                 left = text_grob("Proportion of Hours/Day w/Clicks", rot = 90))
 fig1 =paste("E:/Project Sites/",site,"/Seasonality/",site,"AveragedHoursProp_TimeSeriesITS_StackedGroups.png",sep="")
 ggsave(fig1)
+}
 
 if (nrow(oneyear) >= 365) {
 #plot data as time series with error bars
