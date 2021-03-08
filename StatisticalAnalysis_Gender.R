@@ -26,7 +26,7 @@ library(survival)
 library(gtable)
 
 #load data
-site = 'HZ'
+site = 'GS'
 filename = paste("E:/Project Sites/",site,"/Seasonality/",site,"_binPresence.csv",sep="")
 binPresence = read.csv(filename) #no effort days deleted
 head(binPresence)
@@ -151,6 +151,7 @@ if (site == 'HZ'){
   n = 6
   GroupedDayM = aggregate(binPresence,list(rep(1:(nrow(binPresence)%/%n+1),each=n,len=nrow(binPresence))),mean)[-1];
 }
+
 #round day, year, month, and find season for ITS data
 if (nrow(binPresence) > nrow(GroupedDayF)){
 if (exists('GroupedDayF')){
@@ -309,6 +310,13 @@ if (exists('oneyearF')){
 }
 
 if (site =='GS'){
+  n = 2
+  GroupedYearF = aggregate(oneyear,list(rep(1:(nrow(oneyear)%/%n+1),each=n,len=nrow(oneyear))),mean)[-1];
+  GroupedYearJ = oneyear;
+  GroupedYearM = oneyear;
+}
+
+if (site =='HZ'){
   n = 2
   GroupedYearF = aggregate(oneyear,list(rep(1:(nrow(oneyear)%/%n+1),each=n,len=nrow(oneyear))),mean)[-1];
   GroupedYearJ = oneyear;
@@ -511,14 +519,11 @@ print(plot(viz,allTerms=T),pages=1)
 
 #first way to plot GAM
 vizGG = plot(viz,allTerms = T) +
-  l_points() +
   labs(title = 'Mid-Size (GAM)')+
   l_fitLine(linetype = 3)  +
   l_fitContour()+
   l_ciLine(mul = 5, colour = "blue", linetype = 2) +
   l_ciBar() +
-  l_points(shape = 19, size = 1, alpha = 0.1) +
-  l_rug() +
   theme(axis.text=element_text(size=18),
         axis.title=element_text(size=20,face="bold"))
 print(vizGG,pages =1)
@@ -530,7 +535,6 @@ vizGG2 = plot(viz, allTerms = T) +
   l_fitLine(colour = "red") + l_rug(mapping = aes(x=x,y=y), alpha=0.8) +
   labs(title = 'Mid-Size (GAM)')+
   l_ciLine(mul = 5, colour = "blue", linetype = 2)+
-  l_points(shape = 19, size = 1, alpha = 0.1) + 
   theme(axis.text=element_text(size=18),
         axis.title=element_text(size=20,face="bold"))+
   theme_classic()
