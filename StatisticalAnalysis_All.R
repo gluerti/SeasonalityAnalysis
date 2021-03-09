@@ -25,7 +25,7 @@ library(lubridate)
 library(survival)
 
 #load data
-site = 'GS'
+site = 'HZ'
 filename = paste("E:/Project Sites/",site,"/Seasonality/",site,"_dayData_forGLMR125.csv",sep="")
 dayBinTAB = read.csv(filename) #no effort days deleted
 head(dayBinTAB)
@@ -238,7 +238,7 @@ ggsave(fig5)
 #GAMs with appropiate ITS binning
 
 #GAM to identify seasonal pattern
-if (site == 'AB'){
+if (site == 'GS'){
   gamTw = gam(HoursProp ~ s(day, bs = 'cc', k = 19), data = GroupedDay, family = tw, method = "REML")
   plot(gamTw, pages =1)
   summary(gamTw)
@@ -275,7 +275,7 @@ ggsave(fig6)
 
 #second way to plot GAM
 vizGG2 = plot(viz, allTerms = T) +
-  l_fitLine(colour = "red") + l_rug(mapping = aes(x=x,y=y), alpha=0.8) +
+  l_fitLine(colour = "black", linetype = 3) + l_rug(mapping = aes(x=x,y=y), alpha=0.8) +
   labs(title = 'Sperm whales (GAM)')+
   l_ciLine(mul = 5, colour = "blue", linetype = 2)+
   theme_classic+  theme(axis.text=element_text(size=18),
