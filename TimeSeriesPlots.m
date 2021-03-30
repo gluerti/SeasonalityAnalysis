@@ -1,12 +1,12 @@
 clearvars
 close all
 %% Parameters defined by user
-filePrefix = 'WAT_HZ_04'; % File name to match. 
-siteabrev = 'HZ'; %abbreviation of site.
+filePrefix = 'WAT_GS_03'; % File name to match. 
+siteabrev = 'GS'; %abbreviation of site.
 sp = 'Pm'; % your species code
-ID_dir = 'E:\Project Sites\HZ\TPWS_125'; %where the ID files are stored
-saveDir = 'E:\Project Sites\HZ\Seasonality'; %specify directory to save files
-titleNAME = 'Western Atlantic - Heezen Canyon';
+ID_dir = 'E:\Project Sites\GS\TPWS_125'; %where the ID files are stored
+saveDir = 'E:\Project Sites\GS\Seasonality'; %specify directory to save files
+titleNAME = 'Western Atlantic - Gulf Stream';
 %% load environmental
 HZ = 'HZ.xlsx';
 GS = 'GS.xlsx';
@@ -103,6 +103,16 @@ if strcmp(siteabrev,'GS') % if the site name is GS
    Dtable_week.Prop = Dtable_week.Min./Dtable_week.EffortBin; % proportion of hours per week with echosounder (account for effort)
 else
 end
+
+%% Visualizing the EchoSounder
+Pings = datetime(D,'ConvertFrom','datenum');
+Pings = table(Pings);
+Pings.Var2(:,1) = 1;
+figure
+plot(Pings.Pings,Pings.Var2,'.');
+Pings.day = day(Pings.Pings,'dayofyear');
+figure
+plot(Pings.Pings(Pings.day ==29),Pings.Var2(Pings.day==29),'.');
 %% Plots
 %Plot proportion of hours per DAY with sperm whale presence
 figure
@@ -211,12 +221,12 @@ yyaxis right
 plot(weekPresence.tbin, weekPresence.NormEffort_Bin*100,'.r')
 ylim([-1 101])
 ylabel('Percent Effort')
-title(['Weekly Presence of Mid-Size Animals in the ',titleNAME])
+title(['Mid-Size Animals'])
 subplot(3,1,3)
 yyaxis left
 bar(weekPresence.tbin,weekPresence.MaHoursProp,'FaceColor','c','BarWidth',1)
 ylim([0 max(weekPresence.MaHoursProp)])
-title(['Weekly Presence of Males in the ',titleNAME])
+title(['Males'])
 yyaxis right
 plot(weekPresence.tbin, weekPresence.NormEffort_Bin*100,'.r')
 ylim([-1 101])
